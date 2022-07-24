@@ -31,50 +31,41 @@ class _ViewUserState extends State<ViewUser> {
         appBar: AppBar(
           title: const Text("User Details"),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                          child: ClipOval(
-                            child: msImagePath != "Image"
-                                ? Image.file(
-                                    moPickedImage!,
-                                    width: 150,
-                                    height: 150,
-                                    fit: BoxFit.cover,
-                                  )
-                                : const Icon(
-                                    Icons.person,
-                                    color: Colors.teal,
-                                    size: 150,
-                                  ),
-                          ),
+              Center(
+                child: Container(
+                  width: 400,
+                  height: 300,
+                  decoration: BoxDecoration(
+                      // add border
+                      border: Border.all(
+                          width: 5, color: Colors.tealAccent.shade200),
+                      // add drop shadow
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(10, 10),
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            color: Colors.grey.shade300)
+                      ]),
+                  // implement image
+                  child: msImagePath != "Image"
+                      ? Image.file(
+                          moPickedImage!,
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(
+                          Icons.person,
+                          color: Colors.teal,
+                          size: 300,
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
+                ),
               ),
               const SizedBox(
                 height: 20,

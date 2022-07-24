@@ -23,7 +23,8 @@ class _EditUserState extends State<EditUser> {
 
   var moUserService = UserService();
   DateTime? moDate;
-  File? moPickedImage ;
+  File? moPickedImage;
+
   String? msImagePath = "Image";
 
   final moUserFirstNameController = TextEditingController();
@@ -41,13 +42,13 @@ class _EditUserState extends State<EditUser> {
   String msEmailPattern =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
-  // validate() {
-  //   if (formKey.currentState!.validate()) {
-  //     print("validated");
-  //   } else {
-  //     print("Not Validated");
-  //   }
-  // }
+  validate() {
+    if (formKey.currentState!.validate()) {
+      print("validated");
+    } else {
+      print("Not Validated");
+    }
+  }
 
   String? validateFName(value) {
     if (value!.isEmpty) {
@@ -103,12 +104,6 @@ class _EditUserState extends State<EditUser> {
     mbDob = true;
     return null;
   }
-
-  // String? msValidateFirstName;
-  // String? msValidateLastName;
-  // String? msValidateContact;
-  // String? msValidateEmail;
-  // String? msValidateDob;
 
   // String msContactPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
 
@@ -199,13 +194,20 @@ class _EditUserState extends State<EditUser> {
       if (loPhoto == null) return;
       moPickedImage = File(loPhoto.path);
       setState(() {
-        // moPickedImage = loTempImage;
         msImagePath = loPhoto.path;
       });
       Get.back();
     } catch (error) {
       debugPrint(error.toString());
     }
+  }
+
+  _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   @override
@@ -308,6 +310,7 @@ class _EditUserState extends State<EditUser> {
                     ),
                     hintText: 'Enter First Name',
                     labelText: 'First Name',
+
                     // errorText: msValidateFirstName,
                   ),
                   // validator: RequiredValidator(errorText: "Required"),
@@ -357,25 +360,47 @@ class _EditUserState extends State<EditUser> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                TextFormField(
-                  controller: moUserEmailController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email, color: Colors.teal),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
+                widget.miUserId == 0
+                    ? TextFormField(
+                        controller: moUserEmailController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email, color: Colors.teal),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          hintText: 'Enter Email',
+                          labelText: 'Email',
+                          // errorText: msValidateEmail!,
+                        ),
+                        validator: validateEmail,
+                        // onTap: _showSuccessSnackBar("Clicked") ,
+                        // validator: MultiValidator([
+                        //   RequiredValidator(errorText: "Required"),
+                        //   EmailValidator(errorText: "Invalid"),
+                        // ]),
+                      )
+                    : TextFormField(
+                        controller: moUserEmailController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email, color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          // hintText: 'Enter Email',
+                          // labelText: 'Email',
+                          // errorText: msValidateEmail!,
+                        ),
+                        readOnly: true,
+                        // validator: validateEmail,
+                        // validator: MultiValidator([
+                        //   RequiredValidator(errorText: "Required"),
+                        //   EmailValidator(errorText: "Invalid"),
+                        // ]),
                       ),
-                    ),
-                    hintText: 'Enter Email',
-                    labelText: 'Email',
-                    // errorText: msValidateEmail,
-                  ),
-                  validator: validateEmail,
-                  // validator: MultiValidator([
-                  //   RequiredValidator(errorText: "Required"),
-                  //   EmailValidator(errorText: "Invalid"),
-                  // ]),
-                ),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -397,9 +422,6 @@ class _EditUserState extends State<EditUser> {
                         moDate = loPickedDate;
                         // mbDob = true;
                       });
-                    } else {
-                      print("Date is not selected");
-                      // mbDob = false;
                     }
                   },
                   child: AbsorbPointer(
@@ -435,34 +457,36 @@ class _EditUserState extends State<EditUser> {
                             backgroundColor: Colors.teal,
                             textStyle: const TextStyle(fontSize: 15)),
                         onPressed: () async {
-                          // setState(() {
-                          //   validate();
-                          // });
-                          if (mbFName &&
-                              mbLName &&
-                              mbContact &&
-                              mbEmail &&
-                              mbDob) {
-                            // if (await moUserService.checkEmailVerify(
-                            //         moUserEmailController.text) !=
-                            //     0) {
-                            //   msValidateEmail =  "Required!!!";
-                            // } else {
-                            //   mbEmail = true;
-                            // print("Good Data Can Save");
-
-                            var loUser = User();
-                            if (widget.miUserId == 0) {
-                              loUser.msFName = moUserFirstNameController.text;
-                              loUser.msLName = moUserLastNameController.text;
-                              loUser.msContact = moUserContactController.text;
-                              loUser.msEmail = moUserEmailController.text;
-                              loUser.msDob = moUserDobController.text;
-                              loUser.msImg = msImagePath;
-                              var loResult =
-                                  await moUserService.saveUser(loUser);
-                              Navigator.pop(context, loResult);
-                            } else {
+                          setState(() {
+                            validate();
+                          });
+                          // _showSuccessSnackBar("New Email id");
+                          var loUser = User();
+                          if (widget.miUserId == 0) {
+                            if (mbFName &&
+                                mbLName &&
+                                mbContact &&
+                                mbEmail &&
+                                mbDob) {
+                              if (await moUserService.checkEmailVerify(moUserEmailController.text) ==
+                                  false) {
+                                print("Already Exists");
+                                _showSuccessSnackBar("Email Id Already Exists");
+                              } else {
+                                loUser.msFName = moUserFirstNameController.text;
+                                loUser.msLName = moUserLastNameController.text;
+                                loUser.msContact = moUserContactController.text;
+                                loUser.msEmail = moUserEmailController.text;
+                                loUser.msDob = moUserDobController.text;
+                                loUser.msImg = msImagePath;
+                                var loResult =
+                                    await moUserService.saveUser(loUser);
+                                Navigator.pop(context, loResult);
+                              }
+                            }
+                          } else {
+                            if (mbFName && mbLName && mbContact && mbDob) {
+                              print("New Email id");
                               loUser.miId = widget.miUserId;
                               loUser.msFName = moUserFirstNameController.text;
                               loUser.msLName = moUserLastNameController.text;
@@ -476,9 +500,6 @@ class _EditUserState extends State<EditUser> {
                               Navigator.pop(context, loResult);
                             }
                           }
-                          // } else {
-                          //   print("Print Enter Date");
-                          // }
                         },
                         child: Text(widget.miUserId == 0 ? 'Save' : 'Update')),
                     const SizedBox(

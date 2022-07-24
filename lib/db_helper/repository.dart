@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:sqflite_database/db_helper/database_connection.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -47,10 +48,11 @@ class Repository {
 
   checkEmail(table, email) async {
     var loConnection = await database;
-    var loX = await loConnection?.rawQuery("SELECT count(*) from $table ");
-    int liCount = loX!.length;
-    print("Your Count is : +$liCount");
-    return liCount;
+    // var loX = await loConnection?.rawQuery('select from $table where email=$email');
+    var loX = await loConnection?.query(table,columns:['email'] , where: 'email=?', whereArgs: [email]);
+    print("Your Count is : +${loX.toString()}");
+    print("Your Count is : +${loX.toString() == '[]' ? true :false}");
+    return loX.toString() != '[]' ? false :true;
   }
 
   // checkEmail(table, email) async {
