@@ -1,4 +1,4 @@
-class User {
+  class User {
   int? miId;
   String? msFName;
   String? msLName;
@@ -6,6 +6,7 @@ class User {
   String? msEmail;
   String? msDob;
   String? msImg;
+
   userMap() {
     var moMapping = <String, dynamic>{};
     moMapping['id'] = miId;

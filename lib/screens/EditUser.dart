@@ -24,7 +24,6 @@ class _EditUserState extends State<EditUser> {
   var moUserService = UserService();
   DateTime? moDate;
   File? moPickedImage;
-
   String? msImagePath = "Image";
 
   final moUserFirstNameController = TextEditingController();
@@ -215,7 +214,26 @@ class _EditUserState extends State<EditUser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.miUserId == 0 ? 'Add New User' : "Edit New User"),
-      ),
+        actions: [
+          // IconButton(onPressed: () => {}, icon: const Icon(Icons.search))
+        ],
+        backgroundColor: Colors.teal[500],
+        actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
+        elevation: 15,
+        shadowColor: Colors.orangeAccent,
+        toolbarTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.amber[200],
+            fontSize: 24,
+          ),
+        ).bodyText2,
+        titleTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.amber[200],
+            fontSize: 24,
+          ),
+        ).headline6,
+          ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -468,7 +486,8 @@ class _EditUserState extends State<EditUser> {
                                 mbContact &&
                                 mbEmail &&
                                 mbDob) {
-                              if (await moUserService.checkEmailVerify(moUserEmailController.text) ==
+                              if (await moUserService.checkEmailVerify(
+                                      moUserEmailController.text) ==
                                   false) {
                                 print("Already Exists");
                                 _showSuccessSnackBar("Email Id Already Exists");

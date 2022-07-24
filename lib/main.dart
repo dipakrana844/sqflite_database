@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sqflite_database/model/User.dart';
@@ -39,16 +38,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // bool isLoading = true;
-  late List<User> _userList = <User>[];
-  final _userService = UserService();
+  late List<User> moUserList = <User>[];
+  final moUserService = UserService();
   File? moPickedImage;
   String? msImagePath = "";
 
-
   void _fetchData(BuildContext context) async {
-    // show the loading dialog
     showDialog(
-      // The user CANNOT close this dialog  by pressing outsite it
         barrierDismissible: false,
         context: context,
         builder: (_) {
@@ -81,8 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   getAllUserDetails() async {
-    dynamic users = await _userService.readAllUsers();
-    _userList = <User>[];
+    dynamic users = await moUserService.readAllUsers();
+    moUserList = <User>[];
     if (users.toString() != "[]") {
       users.forEach((user) {
         setState(() {
@@ -95,23 +91,13 @@ class _MyHomePageState extends State<MyHomePage> {
           userModel.msEmail = user['email'];
           userModel.msDob = user['dob'];
           userModel.msImg = user['image'];
-          _userList.add(userModel);
+          moUserList.add(userModel);
         });
       });
     } else {
       setState(() {
-        _userList.clear();
+        moUserList.clear();
         print("No Data Found");
-        // Center(
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: const [
-        //       Text(
-        //         'No Data Found',
-        //       ),
-        //     ],
-        //   ),
-        // );
       });
       _showSuccessSnackBar('User No Data Found');
       const Text(
@@ -151,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   primary: Colors.white, // foreground
                   backgroundColor: Colors.red),
               onPressed: () async {
-                var result = await _userService.deleteUser(userId);
+                var result = await moUserService.deleteUser(userId);
                 if (result != null) {
                   Navigator.pop(context);
                   getAllUserDetails();
@@ -178,9 +164,28 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SQFLite Database"),
+        title: const Text("SQFlite Database App"),
+        actions: const [
+          // IconButton(onPressed:  , icon: const Icon(Icons.search))
+        ],
+        backgroundColor: Colors.teal[500],
+        actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
+        elevation: 15,
+        shadowColor: Colors.orangeAccent,
+        toolbarTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.amber[200],
+            fontSize: 24,
+          ),
+        ).bodyText2,
+        titleTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.amber[200],
+            fontSize: 24,
+          ),
+        ).headline6,
       ),
-      body: _userList.toString() == "[]"
+      body: moUserList.toString() == "[]"
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -196,17 +201,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             )
           : ListView.builder(
-              itemCount: _userList.length,
+              itemCount: moUserList.length,
               itemBuilder: (context, index) {
-              _fetchData(context);
+                // _fetchData(context);
                 return Card(
                   elevation: 4,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(15.0),
-                  // ),
                   child: ClipPath(
                     clipper: ShapeBorderClipper(
                         shape: RoundedRectangleBorder(
@@ -214,10 +216,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       padding: const EdgeInsets.only(
                           top: 5, bottom: 5, left: 0, right: 0),
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         border: Border(
-                          left: BorderSide(color: Colors.amber.shade700, width: 8),
-                          right: BorderSide(color: Colors.amber.shade700, width: 8),
+                          left: BorderSide(
+                              color: Colors.amber.shade700, width: 8),
+                          right: BorderSide(
+                              color: Colors.amber.shade700, width: 8),
                           // top: BorderSide(color: Colors.amber.shade100, width: 5),
                           // bottom: BorderSide(color: Colors.amber.shade100, width: 5),
                         ),
@@ -228,16 +232,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ViewUser(
-                                moUser: _userList[index],
+                                moUser: moUserList[index],
                               ),
                             ),
                           );
                         },
-                        // leading: Text(_userList[index].msImg ?? ''),
                         leading: ClipOval(
-                          child: _userList[index].msImg != "Image"
+                          child: moUserList[index].msImg != "Image"
                               ? Image.file(
-                                  File(_userList[index].msImg ?? ''),
+                                  File(moUserList[index].msImg ?? ''),
                                   fit: BoxFit.cover,
                                   height: 50,
                                   width: 50,
@@ -248,14 +251,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                   size: 50,
                                 ),
                         ),
-                        title: Text("${_userList[index].msFName}  ${_userList[index].msLName}" ),
+                        title: Text(
+                            "${moUserList[index].msFName}  ${moUserList[index].msLName}"),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(_userList[index].msContact ?? '',style: const TextStyle(
-                                fontSize: 15, color: Colors.black, fontWeight: FontWeight.w100),),
-                            Text(_userList[index].msEmail ?? '',style: const TextStyle(
-                                fontSize: 15, color: Colors.black, fontWeight: FontWeight.w100),),
+                            Text(
+                              moUserList[index].msContact ?? '',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w100),
+                            ),
+                            Text(
+                              moUserList[index].msEmail ?? '',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w100),
+                            ),
                           ],
                         ),
                         trailing: Row(
@@ -267,13 +281,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => EditUser(
-                                        miUserId: _userList[index].miId!,
+                                        miUserId: moUserList[index].miId!,
                                       ),
                                     ),
                                   ).then((data) {
                                     if (data != null) {
                                       getAllUserDetails();
-                                      
+
                                       _showSuccessSnackBar(
                                           'User Detail Updated Success');
                                     }
@@ -286,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             IconButton(
                               onPressed: () {
                                 _deleteFormDialog(
-                                    context, _userList[index].miId);
+                                    context, moUserList[index].miId);
                                 print("Delete");
                               },
                               icon: const Icon(
@@ -302,6 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               }),
       floatingActionButton: FloatingActionButton(
+        shape: const StadiumBorder(),
         onPressed: () {
           Navigator.push(
                   context,
@@ -314,7 +329,11 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           });
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.teal,
+        child: const Icon(
+          Icons.edit,
+          size: 20.0,
+        ),
       ),
     );
   }

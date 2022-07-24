@@ -30,6 +30,25 @@ class _ViewUserState extends State<ViewUser> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("User Details"),
+          actions: const [
+            // IconButton(onPressed: () => {}, icon: const Icon(Icons.search))
+          ],
+          backgroundColor: Colors.teal[500],
+          actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
+          elevation: 15,
+          shadowColor: Colors.orangeAccent,
+          toolbarTextStyle: TextTheme(
+            headline6: TextStyle(
+              color: Colors.amber[200],
+              fontSize: 24,
+            ),
+          ).bodyText2,
+          titleTextStyle: TextTheme(
+            headline6: TextStyle(
+              color: Colors.amber[200],
+              fontSize: 24,
+            ),
+          ).headline6,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
