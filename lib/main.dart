@@ -77,21 +77,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   getAllUserDetails() async {
-    dynamic users = await moUserService.readAllUsers();
+    dynamic moUsers = await moUserService.readAllUsers();
     moUserList = <User>[];
-    if (users.toString() != "[]") {
-      users.forEach((user) {
+    if (moUsers.toString() != "[]") {
+      moUsers.forEach((user) {
         setState(() {
           // isLoading = false;
-          var userModel = User();
-          userModel.miId = user['id'];
-          userModel.msFName = user['fName'];
-          userModel.msLName = user['lName'];
-          userModel.msContact = user['contact'];
-          userModel.msEmail = user['email'];
-          userModel.msDob = user['dob'];
-          userModel.msImg = user['image'];
-          moUserList.add(userModel);
+          var moUserModel = User();
+          moUserModel.miId = user['id'];
+          moUserModel.msFName = user['fName'];
+          moUserModel.msLName = user['lName'];
+          moUserModel.msContact = user['contact'];
+          moUserModel.msEmail = user['email'];
+          moUserModel.msDob = user['dob'];
+          moUserModel.msImg = user['image'];
+          moUserList.add(moUserModel);
         });
       });
     } else {
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         moUserList.clear();
         print("No Data Found");
       });
-      _showSuccessSnackBar('User No Data Found');
+      // _showSuccessSnackBar('User No Data Found');
       const Text(
         'No Data Found',
         style: TextStyle(
@@ -137,8 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   primary: Colors.white, // foreground
                   backgroundColor: Colors.red),
               onPressed: () async {
-                var result = await moUserService.deleteUser(userId);
-                if (result != null) {
+                var loResult = await moUserService.deleteUser(userId);
+                if (loResult != null) {
                   Navigator.pop(context);
                   getAllUserDetails();
                   _showSuccessSnackBar('User Detail Deleted Success');

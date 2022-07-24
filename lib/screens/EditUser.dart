@@ -19,7 +19,7 @@ class EditUser extends StatefulWidget {
 }
 
 class _EditUserState extends State<EditUser> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> moFormKey = GlobalKey<FormState>();
 
   var moUserService = UserService();
   DateTime? moDate;
@@ -42,7 +42,7 @@ class _EditUserState extends State<EditUser> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
   validate() {
-    if (formKey.currentState!.validate()) {
+    if (moFormKey.currentState!.validate()) {
       print("validated");
     } else {
       print("Not Validated");
@@ -238,7 +238,7 @@ class _EditUserState extends State<EditUser> {
         child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: formKey,
+            key: moFormKey,
             autovalidateMode: AutovalidateMode.always,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,13 +307,6 @@ class _EditUserState extends State<EditUser> {
                     ),
                   ],
                 ),
-                // const Text(
-                //   'Edit New User',
-                //   style: TextStyle(
-                //       fontSize: 20,
-                //       color: Colors.teal,
-                //       fontWeight: FontWeight.w500),
-                // ),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -404,13 +397,8 @@ class _EditUserState extends State<EditUser> {
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.email, color: Colors.grey),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
+
                           ),
-                          // hintText: 'Enter Email',
-                          // labelText: 'Email',
-                          // errorText: msValidateEmail!,
                         ),
                         readOnly: true,
                         // validator: validateEmail,
@@ -438,7 +426,6 @@ class _EditUserState extends State<EditUser> {
                       setState(() {
                         moUserDobController.text = msFormattedDate;
                         moDate = loPickedDate;
-                        // mbDob = true;
                       });
                     }
                   },
@@ -524,19 +511,19 @@ class _EditUserState extends State<EditUser> {
                     const SizedBox(
                       width: 10.0,
                     ),
-                    // TextButton(
-                    //     style: TextButton.styleFrom(
-                    //         primary: Colors.white,
-                    //         backgroundColor: Colors.red,
-                    //         textStyle: const TextStyle(fontSize: 15)),
-                    //     onPressed: () {
-                    //       moUserFirstNameController.text = '';
-                    //       moUserLastNameController.text = '';
-                    //       moUserContactController.text = '';
-                    //       moUserEmailController.text = '';
-                    //       moUserDobController.text = '';
-                    //     },
-                    //     child: const Text('Clear'))
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            backgroundColor: Colors.red,
+                            textStyle: const TextStyle(fontSize: 15)),
+                        onPressed: () {
+                          moUserFirstNameController.text = '';
+                          moUserLastNameController.text = '';
+                          moUserContactController.text = '';
+                          widget.miUserId == 0 ? moUserEmailController.text = '' : null;
+                          moUserDobController.text = '';
+                        },
+                        child: const Text('Clear'))
                   ],
                 )
               ],
