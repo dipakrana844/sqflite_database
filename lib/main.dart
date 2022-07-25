@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sqflite_database/model/User.dart';
-import 'package:sqflite_database/screens/EditUser.dart';
+import 'package:sqflite_database/screens/AddEditUser.dart';
 import 'package:sqflite_database/screens/ViewUsers.dart';
 import 'package:sqflite_database/services/userService.dart';
 
@@ -43,39 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
   File? moPickedImage;
   String? msImagePath = "";
 
-  void _fetchData(BuildContext context) async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('Loading...')
-                ],
-              ),
-            ),
-          );
-        });
-
-    // Your asynchronous computation here (fetching data from an API, processing files, inserting something to the database, etc)
-    await Future.delayed(const Duration(seconds: 3));
-
-    // Close the dialog programmatically
-    Navigator.of(context).pop();
-  }
-
   getAllUserDetails() async {
     dynamic moUsers = await moUserService.readAllUsers();
     moUserList = <User>[];
@@ -99,7 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
         moUserList.clear();
         print("No Data Found");
       });
-      // _showSuccessSnackBar('User No Data Found');
       const Text(
         'No Data Found',
         style: TextStyle(
@@ -114,10 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  _showSuccessSnackBar(String message) {
+  _showSuccessSnackBar(String fsMessage) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(fsMessage),
       ),
     );
   }
@@ -165,19 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("SQFlite Database App"),
-        actions: const [
-          // IconButton(onPressed:  , icon: const Icon(Icons.search))
-        ],
-        backgroundColor: Colors.teal[500],
-        actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
-        elevation: 15,
-        shadowColor: Colors.orangeAccent,
-        toolbarTextStyle: TextTheme(
-          headline6: TextStyle(
-            color: Colors.amber[200],
-            fontSize: 24,
-          ),
-        ).bodyText2,
         titleTextStyle: TextTheme(
           headline6: TextStyle(
             color: Colors.amber[200],
@@ -191,11 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text(
-                    '🚫 No Data Found 🚫',
+                    ' No Data Found ',
                     style: TextStyle(
                         fontSize: 30,
-                        color: Colors.teal,
-                        fontWeight: FontWeight.w100),
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -222,8 +175,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: Colors.amber.shade700, width: 8),
                           right: BorderSide(
                               color: Colors.amber.shade700, width: 8),
-                          // top: BorderSide(color: Colors.amber.shade100, width: 5),
-                          // bottom: BorderSide(color: Colors.amber.shade100, width: 5),
                         ),
                       ),
                       child: ListTile(
@@ -331,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         backgroundColor: Colors.teal,
         child: const Icon(
-          Icons.edit,
+          Icons.add,
           size: 20.0,
         ),
       ),

@@ -30,19 +30,6 @@ class _ViewUserState extends State<ViewUser> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("User Details"),
-          actions: const [
-            // IconButton(onPressed: () => {}, icon: const Icon(Icons.search))
-          ],
-          backgroundColor: Colors.teal[500],
-          actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
-          elevation: 15,
-          shadowColor: Colors.orangeAccent,
-          toolbarTextStyle: TextTheme(
-            headline6: TextStyle(
-              color: Colors.amber[200],
-              fontSize: 24,
-            ),
-          ).bodyText2,
           titleTextStyle: TextTheme(
             headline6: TextStyle(
               color: Colors.amber[200],
@@ -63,7 +50,6 @@ class _ViewUserState extends State<ViewUser> {
                       // add border
                       border: Border.all(
                           width: 5, color: Colors.tealAccent.shade200),
-                      // add drop shadow
                       boxShadow: [
                         BoxShadow(
                             offset: Offset(10, 10),
@@ -71,7 +57,6 @@ class _ViewUserState extends State<ViewUser> {
                             spreadRadius: 2,
                             color: Colors.grey.shade300)
                       ]),
-                  // implement image
                   child: msImagePath != "Image"
                       ? Image.file(
                           moPickedImage!,
@@ -89,7 +74,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('Id',
                       style: TextStyle(
@@ -106,7 +91,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('First Name',
                       style: TextStyle(
@@ -123,7 +108,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('Last Name',
                       style: TextStyle(
@@ -140,7 +125,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('Contact Number',
                       style: TextStyle(
@@ -157,7 +142,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('Email Id',
                       style: TextStyle(
@@ -174,7 +159,7 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              Wrap(
                 children: [
                   const Text('Date of Birth',
                       style: TextStyle(

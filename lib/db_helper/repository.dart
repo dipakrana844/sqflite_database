@@ -47,7 +47,6 @@ class Repository {
 
   checkEmail(table, email) async {
     var loConnection = await database;
-    // var loX = await loConnection?.rawQuery('select from $table where email=$email');
     var loX = await loConnection?.query(table,
         columns: ['email'], where: 'email=?', whereArgs: [email]);
     print("Your Count is : +${loX.toString()}");
@@ -55,11 +54,6 @@ class Repository {
     return loX.toString() != '[]' ? false : true;
   }
 
-  // checkEmail(table, email) async {
-  //   var loConnection = await database;
-  //   return await loConnection
-  //       ?.rawQuery("SELECT count(*) from $table where email='$email'");
-  // }
 
   checkDatabase(table) async {
     var loConnection = await database;

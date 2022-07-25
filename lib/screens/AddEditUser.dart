@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite_database/model/User.dart';
 import 'package:sqflite_database/services/userService.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 
 class EditUser extends StatefulWidget {
   final int miUserId;
@@ -82,7 +81,6 @@ class _EditUserState extends State<EditUser> {
     return null;
   }
 
-  // !RegExp(msEmailPattern).hasMatch(moUserEmailController.text)
   String? validateEmail(value) {
     if (value!.isEmpty) {
       mbEmail = false;
@@ -103,8 +101,6 @@ class _EditUserState extends State<EditUser> {
     mbDob = true;
     return null;
   }
-
-  // String msContactPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
 
   getUserData(int fiId) async {
     if (widget.miUserId != 0) {
@@ -201,10 +197,10 @@ class _EditUserState extends State<EditUser> {
     }
   }
 
-  _showSuccessSnackBar(String message) {
+  _showSuccessSnackBar(String fsMessage) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(fsMessage),
       ),
     );
   }
@@ -214,26 +210,13 @@ class _EditUserState extends State<EditUser> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.miUserId == 0 ? 'Add New User' : "Edit New User"),
-        actions: [
-          // IconButton(onPressed: () => {}, icon: const Icon(Icons.search))
-        ],
-        backgroundColor: Colors.teal[500],
-        actionsIconTheme: const IconThemeData(color: Colors.amber, size: 36),
-        elevation: 15,
-        shadowColor: Colors.orangeAccent,
-        toolbarTextStyle: TextTheme(
-          headline6: TextStyle(
-            color: Colors.amber[200],
-            fontSize: 24,
-          ),
-        ).bodyText2,
         titleTextStyle: TextTheme(
           headline6: TextStyle(
             color: Colors.amber[200],
             fontSize: 24,
           ),
         ).headline6,
-          ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -276,8 +259,6 @@ class _EditUserState extends State<EditUser> {
                             ),
                           ),
                           Container(
-                            // margin: const EdgeInsets.all(0.0),
-                            // padding: const EdgeInsets.all(0.0),
                             decoration: BoxDecoration(
                               color: Colors.teal,
                               border: Border.all(
@@ -321,10 +302,7 @@ class _EditUserState extends State<EditUser> {
                     ),
                     hintText: 'Enter First Name',
                     labelText: 'First Name',
-
-                    // errorText: msValidateFirstName,
                   ),
-                  // validator: RequiredValidator(errorText: "Required"),
                   validator: validateFName,
                 ),
                 const SizedBox(
@@ -341,7 +319,6 @@ class _EditUserState extends State<EditUser> {
                     ),
                     hintText: 'Enter Last Name',
                     labelText: 'Last Name',
-                    // errorText: msValidateLastName,
                   ),
                   validator: validateLName,
                 ),
@@ -360,7 +337,6 @@ class _EditUserState extends State<EditUser> {
                     ),
                     hintText: 'Enter Contact Number',
                     labelText: 'Contact',
-                    // errorText: msValidateContact,
                   ),
                   validator: validateContact,
                   keyboardType: TextInputType.number,
@@ -386,26 +362,14 @@ class _EditUserState extends State<EditUser> {
                           // errorText: msValidateEmail!,
                         ),
                         validator: validateEmail,
-                        // onTap: _showSuccessSnackBar("Clicked") ,
-                        // validator: MultiValidator([
-                        //   RequiredValidator(errorText: "Required"),
-                        //   EmailValidator(errorText: "Invalid"),
-                        // ]),
                       )
                     : TextFormField(
                         controller: moUserEmailController,
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.email, color: Colors.grey),
-                          border: OutlineInputBorder(
-
-                          ),
+                          border: OutlineInputBorder(),
                         ),
                         readOnly: true,
-                        // validator: validateEmail,
-                        // validator: MultiValidator([
-                        //   RequiredValidator(errorText: "Required"),
-                        //   EmailValidator(errorText: "Invalid"),
-                        // ]),
                       ),
                 const SizedBox(
                   height: 20.0,
@@ -443,14 +407,11 @@ class _EditUserState extends State<EditUser> {
                         // errorText: msValidateDob == "" ? 'Save' : 'Update',
                         labelText: "Enter DOB",
                         hintText: 'Enter Date of Birth',
-                        // errorText: msValidateDob ? 'Required' : null,
                       ),
-                      // readOnly: true,
                       validator: validateDob,
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -465,7 +426,6 @@ class _EditUserState extends State<EditUser> {
                           setState(() {
                             validate();
                           });
-                          // _showSuccessSnackBar("New Email id");
                           var loUser = User();
                           if (widget.miUserId == 0) {
                             if (mbFName &&
@@ -520,7 +480,9 @@ class _EditUserState extends State<EditUser> {
                           moUserFirstNameController.text = '';
                           moUserLastNameController.text = '';
                           moUserContactController.text = '';
-                          widget.miUserId == 0 ? moUserEmailController.text = '' : null;
+                          widget.miUserId == 0
+                              ? moUserEmailController.text = ''
+                              : null;
                           moUserDobController.text = '';
                         },
                         child: const Text('Clear'))
