@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sqflite_database/model/User.dart';
 import 'package:sqflite_database/screens/AddEditUser.dart';
 import 'package:sqflite_database/screens/ViewUsers.dart';
+import 'package:sqflite_database/screens/demo.dart';
 import 'package:sqflite_database/services/userService.dart';
 
 void main() {
@@ -231,14 +232,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => EditUser(
+                                      builder: (context) => AddEditUser(
                                         miUserId: moUserList[index].miId!,
                                       ),
                                     ),
                                   ).then((data) {
                                     if (data != null) {
                                       getAllUserDetails();
-
                                       _showSuccessSnackBar(
                                           'User Detail Updated Success');
                                     }
@@ -266,13 +266,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               }),
+      // floatingActionButton:FloatingActionButton.extended(
+      //   onPressed: () {
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) =>  EditUser(miUserId: 1)));
+      //   },
+      //   icon: Icon(Icons.save),
+      //   label: Text("Save"),
+      // ),
       floatingActionButton: FloatingActionButton(
         shape: const StadiumBorder(),
         onPressed: () {
           Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const EditUser(miUserId: 0)))
+                      builder: (context) => const AddEditUser(miUserId: 0)))
               .then((data) {
             if (data != null) {
               getAllUserDetails();
@@ -286,6 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
           size: 20.0,
         ),
       ),
+
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,16 +7,16 @@ import 'package:intl/intl.dart';
 import 'package:sqflite_database/model/User.dart';
 import 'package:sqflite_database/services/userService.dart';
 
-class EditUser extends StatefulWidget {
+class AddEditUser extends StatefulWidget {
   final int miUserId;
 
-  const EditUser({Key? key, required this.miUserId}) : super(key: key);
+  const AddEditUser({Key? key, required this.miUserId}) : super(key: key);
 
   @override
-  State<EditUser> createState() => _EditUserState();
+  State<AddEditUser> createState() => AddEditUserState();
 }
 
-class _EditUserState extends State<EditUser> {
+class AddEditUserState extends State<AddEditUser> {
   GlobalKey<FormState> moFormKey = GlobalKey<FormState>();
 
   var moUserService = UserService();
@@ -107,15 +106,22 @@ class _EditUserState extends State<EditUser> {
       var loUser = await UserService()
           .moRepository
           .readDataById('users', widget.miUserId);
+      var loFName = loUser[0]['fName'] ?? '';
+      var loLName = loUser[0]['lName'] ?? '';
+      var loContact = loUser[0]['contact'] ?? '';
+      var loEmail = loUser[0]['email'] ?? '';
+      var loDob = loUser[0]['dob'] ?? '';
+      moDate = DateFormat('dd-MM-yyyy').parse(loUser[0]['dob'] ?? '');
+      var loImage = loUser[0]['image'];
+      moPickedImage = File(loImage!);
+
       setState(() {
-        moUserFirstNameController.text = loUser[0]['fName'];
-        moUserLastNameController.text = loUser[0]['lName'] ?? '';
-        moUserContactController.text = loUser[0]['contact'] ?? '';
-        moUserEmailController.text = loUser[0]['email'] ?? '';
-        moUserDobController.text = loUser[0]['dob'] ?? '';
-        moDate = DateFormat('dd-MM-yyyy').parse(loUser[0]['dob'] ?? '');
-        msImagePath = loUser[0]['image'];
-        moPickedImage = File(msImagePath!);
+        moUserFirstNameController.text = loFName;
+        moUserLastNameController.text = loLName;
+        moUserContactController.text = loContact;
+        moUserEmailController.text = loEmail;
+        moUserDobController.text = loDob;
+        msImagePath = loImage;
       });
     }
   }
@@ -219,279 +225,302 @@ class _EditUserState extends State<EditUser> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: moFormKey,
-            autovalidateMode: AutovalidateMode.always,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(16.0),
+            child: Stack(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Stack(
+                Form(
+                  key: moFormKey,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                            ),
-                            child: ClipOval(
-                              child: msImagePath != "Image"
-                                  ? Image.file(
-                                      moPickedImage!,
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const Icon(
-                                      Icons.person,
-                                      color: Colors.teal,
-                                      size: 150,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black, width: 2),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(100),
                                     ),
+                                  ),
+                                  child: ClipOval(
+                                    child: msImagePath != "Image"
+                                        ? Image.file(
+                                            moPickedImage!,
+                                            width: 150,
+                                            height: 150,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : const Icon(
+                                            Icons.person,
+                                            color: Colors.teal,
+                                            size: 150,
+                                          ),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.teal,
+                                        border: Border.all(
+                                          color: Colors.black,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      /*child: Positioned(*/
+                                        // bottom: 0,
+                                        // right: 10,
+                                        child: IconButton(
+                                          onPressed: imagePickerOption,
+                                          icon: const Icon(
+                                            Icons.camera_alt,
+                                            color: Colors.white,
+                                            size: 25,
+                                      /*    ),*/
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.teal,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Positioned(
-                              // bottom: 0,
-                              // right: 10,
-                              child: IconButton(
-                                onPressed: imagePickerOption,
-                                icon: const Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
+                          const SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  controller: moUserFirstNameController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.person, color: Colors.teal),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
+                      const SizedBox(
+                        height: 20.0,
                       ),
-                    ),
-                    hintText: 'Enter First Name',
-                    labelText: 'First Name',
-                  ),
-                  validator: validateFName,
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  controller: moUserLastNameController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.person, color: Colors.teal),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    hintText: 'Enter Last Name',
-                    labelText: 'Last Name',
-                  ),
-                  validator: validateLName,
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  controller: moUserContactController,
-                  maxLength: 10,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.phone, color: Colors.teal),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    hintText: 'Enter Contact Number',
-                    labelText: 'Contact',
-                  ),
-                  validator: validateContact,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                widget.miUserId == 0
-                    ? TextFormField(
-                        controller: moUserEmailController,
+                      TextFormField(
+                        controller: moUserFirstNameController,
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email, color: Colors.teal),
+                          prefixIcon: Icon(Icons.person, color: Colors.teal),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(10),
                             ),
                           ),
-                          hintText: 'Enter Email',
-                          labelText: 'Email',
-                          // errorText: msValidateEmail!,
+                          hintText: 'Enter First Name',
+                          labelText: 'First Name',
                         ),
-                        validator: validateEmail,
-                      )
-                    : TextFormField(
-                        controller: moUserEmailController,
+                        validator: validateFName,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        controller: moUserLastNameController,
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email, color: Colors.grey),
-                          border: OutlineInputBorder(),
-                        ),
-                        readOnly: true,
-                      ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    final loInitialDate = DateTime.now();
-                    final loPickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: moDate ?? loInitialDate,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-
-                    if (loPickedDate != null) {
-                      String msFormattedDate =
-                          DateFormat('dd-MM-yyyy').format(loPickedDate);
-                      setState(() {
-                        moUserDobController.text = msFormattedDate;
-                        moDate = loPickedDate;
-                      });
-                    }
-                  },
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      controller: moUserDobController,
-                      decoration: const InputDecoration(
-                        prefixIcon:
-                            Icon(Icons.calendar_today, color: Colors.teal),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                          prefixIcon: Icon(Icons.person, color: Colors.teal),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
                           ),
+                          hintText: 'Enter Last Name',
+                          labelText: 'Last Name',
                         ),
-                        // errorText: msValidateDob == "" ? 'Save' : 'Update',
-                        labelText: "Enter DOB",
-                        hintText: 'Enter Date of Birth',
+                        validator: validateLName,
                       ),
-                      validator: validateDob,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                        style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            backgroundColor: Colors.teal,
-                            textStyle: const TextStyle(fontSize: 15)),
-                        onPressed: () async {
-                          setState(() {
-                            validate();
-                          });
-                          var loUser = User();
-                          if (widget.miUserId == 0) {
-                            if (mbFName &&
-                                mbLName &&
-                                mbContact &&
-                                mbEmail &&
-                                mbDob) {
-                              if (await moUserService.checkEmailVerify(
-                                      moUserEmailController.text) ==
-                                  false) {
-                                print("Already Exists");
-                                _showSuccessSnackBar("Email Id Already Exists");
-                              } else {
-                                loUser.msFName = moUserFirstNameController.text;
-                                loUser.msLName = moUserLastNameController.text;
-                                loUser.msContact = moUserContactController.text;
-                                loUser.msEmail = moUserEmailController.text;
-                                loUser.msDob = moUserDobController.text;
-                                loUser.msImg = msImagePath;
-                                var loResult =
-                                    await moUserService.saveUser(loUser);
-                                Navigator.pop(context, loResult);
-                              }
-                            }
-                          } else {
-                            if (mbFName && mbLName && mbContact && mbDob) {
-                              print("New Email id");
-                              loUser.miId = widget.miUserId;
-                              loUser.msFName = moUserFirstNameController.text;
-                              loUser.msLName = moUserLastNameController.text;
-                              loUser.msContact = moUserContactController.text;
-                              loUser.msEmail = moUserEmailController.text;
-                              loUser.msDob = moUserDobController.text;
-                              loUser.msImg = msImagePath;
-                              moPickedImage = File(msImagePath!);
-                              var loResult =
-                                  await moUserService.updateUser(loUser);
-                              Navigator.pop(context, loResult);
-                            }
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        controller: moUserContactController,
+                        maxLength: 10,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.phone, color: Colors.teal),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          hintText: 'Enter Contact Number',
+                          labelText: 'Contact',
+                        ),
+                        validator: validateContact,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      widget.miUserId == 0
+                          ? TextFormField(
+                              controller: moUserEmailController,
+                              decoration: const InputDecoration(
+                                prefixIcon:
+                                    Icon(Icons.email, color: Colors.teal),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                hintText: 'Enter Email',
+                                labelText: 'Email',
+                                // errorText: msValidateEmail!,
+                              ),
+                              validator: validateEmail,
+                            )
+                          : TextFormField(
+                              controller: moUserEmailController,
+                              decoration: const InputDecoration(
+                                prefixIcon:
+                                    Icon(Icons.email, color: Colors.grey),
+                                border: OutlineInputBorder(),
+                              ),
+                              readOnly: true,
+                            ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final loInitialDate = DateTime.now();
+                          final loPickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: moDate ?? loInitialDate,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          );
+
+                          if (loPickedDate != null) {
+                            String msFormattedDate =
+                                DateFormat('dd-MM-yyyy').format(loPickedDate);
+                            setState(() {
+                              moUserDobController.text = msFormattedDate;
+                              moDate = loPickedDate;
+                            });
                           }
                         },
-                        child: Text(widget.miUserId == 0 ? 'Save' : 'Update')),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            backgroundColor: Colors.red,
-                            textStyle: const TextStyle(fontSize: 15)),
-                        onPressed: () {
-                          moUserFirstNameController.text = '';
-                          moUserLastNameController.text = '';
-                          moUserContactController.text = '';
-                          widget.miUserId == 0
-                              ? moUserEmailController.text = ''
-                              : null;
-                          moUserDobController.text = '';
-                        },
-                        child: const Text('Clear'))
-                  ],
-                )
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: moUserDobController,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.calendar_today,
+                                  color: Colors.teal),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              // errorText: msValidateDob == "" ? 'Save' : 'Update',
+                              labelText: "Enter DOB",
+                              hintText: 'Enter Date of Birth',
+                            ),
+                            validator: validateDob,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.teal,
+                                  textStyle: const TextStyle(fontSize: 15)),
+                              onPressed: () async {
+                                setState(() {
+                                  validate();
+                                });
+                                var loUser = User();
+                                if (widget.miUserId == 0) {
+                                  if (mbFName &&
+                                      mbLName &&
+                                      mbContact &&
+                                      mbEmail &&
+                                      mbDob) {
+                                    if (await moUserService.checkEmailVerify(
+                                            moUserEmailController.text) ==
+                                        false) {
+                                      print("Already Exists");
+                                      _showSuccessSnackBar(
+                                          "Email Id Already Exists");
+                                    } else {
+                                      loUser.msFName =
+                                          moUserFirstNameController.text;
+                                      loUser.msLName =
+                                          moUserLastNameController.text;
+                                      loUser.msContact =
+                                          moUserContactController.text;
+                                      loUser.msEmail =
+                                          moUserEmailController.text;
+                                      loUser.msDob = moUserDobController.text;
+                                      loUser.msImg = msImagePath;
+                                      var loResult =
+                                          await moUserService.saveUser(loUser);
+                                      Navigator.pop(context, loResult);
+                                    }
+                                  }
+                                } else {
+                                  if (mbFName &&
+                                      mbLName &&
+                                      mbContact &&
+                                      mbDob) {
+                                    print("New Email id");
+                                    loUser.miId = widget.miUserId;
+                                    loUser.msFName =
+                                        moUserFirstNameController.text;
+                                    loUser.msLName =
+                                        moUserLastNameController.text;
+                                    loUser.msContact =
+                                        moUserContactController.text;
+                                    loUser.msEmail = moUserEmailController.text;
+                                    loUser.msDob = moUserDobController.text;
+                                    loUser.msImg = msImagePath;
+                                    moPickedImage = File(msImagePath!);
+                                    var loResult =
+                                        await moUserService.updateUser(loUser);
+                                    Navigator.pop(context, loResult);
+                                  }
+                                }
+                              },
+                              child: Text(
+                                  widget.miUserId == 0 ? 'Save' : 'Update')),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.red,
+                                  textStyle: const TextStyle(fontSize: 15)),
+                              onPressed: () {
+                                moUserFirstNameController.text = '';
+                                moUserLastNameController.text = '';
+                                moUserContactController.text = '';
+                                widget.miUserId == 0
+                                    ? moUserEmailController.text = ''
+                                    : null;
+                                moUserDobController.text = '';
+                              },
+                              child: const Text('Clear'))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ),
+            )),
       ),
     );
   }

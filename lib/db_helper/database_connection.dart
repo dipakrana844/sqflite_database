@@ -17,16 +17,11 @@ class DatabaseConnection {
         "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,fName TEXT,lName TEXT, contact Text,email "
         "TEXT,dob TEXT,image TEXT, createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
     await database.execute(lsSql);
-    String lsSqlTeachers =
-        "CREATE TABLE teachers (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,fName TEXT,lName TEXT, contact Text,email "
-        "TEXT,dob TEXT,image TEXT, createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
-    await database.execute(lsSqlTeachers);
+
+    // String insert = "insert into users (id ,fName ,lName , contact ,email "
+    //     ",dob ,image ) VALUES(1,'dipak','rana','1234567890','a@a.a','12-04-2022','Image')";
+    //
+    // await database.rawInsert(insert);
   }
 
-  // Future<void> _createDatabaseTeacher(Database database, int version) async {
-  //   String lsSql =
-  //       "CREATE TABLE teachers (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,fName TEXT,lName TEXT, contact Text,email "
-  //       "TEXT,dob TEXT,image TEXT, createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
-  //   await database.execute(lsSql);
-  // }
 }
