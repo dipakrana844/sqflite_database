@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:sqflite_database/model/User.dart';
 import 'package:sqflite_database/screens/AddEditUser.dart';
 import 'package:sqflite_database/screens/ViewUsers.dart';
-import 'package:sqflite_database/screens/demo.dart';
 import 'package:sqflite_database/services/userService.dart';
 
 void main() {
@@ -266,16 +265,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               }),
-      // floatingActionButton:FloatingActionButton.extended(
-      //   onPressed: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) =>  EditUser(miUserId: 1)));
-      //   },
-      //   icon: Icon(Icons.save),
-      //   label: Text("Save"),
-      // ),
       floatingActionButton: FloatingActionButton(
         shape: const StadiumBorder(),
         onPressed: () {
